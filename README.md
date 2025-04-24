@@ -25,4 +25,8 @@ how to install it?
 
 (8). enjoy your hunt!
 
+![Screenshot 2025-04-24 203620](https://github.com/user-attachments/assets/7d7c413e-b81e-41ff-98f6-7a9ad1e258e6)
+
+
 WARNING: please be sure that you have configured discord hooks correctly and please run the script on a VPS server and in tmux https://phoenixnap.com/kb/tmux-cheat-sheet
+
