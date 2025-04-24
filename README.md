@@ -30,3 +30,5 @@ how to install it?
 
 WARNING: please be sure that you have configured discord hooks correctly and please run the script on a VPS server and in tmux https://phoenixnap.com/kb/tmux-cheat-sheet
 
+
+# any misuse of this tool is on your own responsibility and the manufacturer does not take any responsibility for any misuse or attacks (it is only for educational purposes and creating security on websites)In the name of God / any misuse of this tool is on your own responsibility and the developer does not take any responsibility for any misuse or attacks (it is only for educational purposes and creating security on websites)
