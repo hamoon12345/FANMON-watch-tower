@@ -1,6 +1,9 @@
 # FANMON-watch-tower
 
+![banner](https://github.com/user-attachments/assets/b2915a92-82db-4aaf-8a19-927ad51302d9)
+
 hi this is a watch tower made by hamoon
+
 
 with this watch tower you can watch for: new parameters / new subdomains / new ssl certificates / new medium write ups / new open ports / new js files that the developer has been add (and some other stuffs that will be add to the watch tower
 
