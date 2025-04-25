@@ -21,8 +21,23 @@
 ![Screenshot 2025-04-24 211041](https://github.com/user-attachments/assets/ec8b0fe2-e126-4f93-9bc5-80d1b931e7a3)
 
 
+# Screenshots:
 
+![Screenshot 2025-04-25 161906](https://github.com/user-attachments/assets/d8328193-8f35-4b44-8642-8f2ad6385c48)
 
+![Screenshot 2025-04-25 161851](https://github.com/user-attachments/assets/e3a9244b-3eef-4511-9f35-e9ae6d10edd2)
+
+![Screenshot 2025-04-25 162322](https://github.com/user-attachments/assets/ea161585-bd75-40f7-8478-808ba93c8c52)
+
+![Screenshot 2025-04-25 162342](https://github.com/user-attachments/assets/98eafbe4-bbe1-48d3-8d1a-e187b253c84a)
+
+![Screenshot 2025-04-25 162400](https://github.com/user-attachments/assets/1833bd7b-c429-4d25-ad79-410fba730dd6)
+
+![Screenshot 2025-04-25 162421](https://github.com/user-attachments/assets/49e91873-9617-4ce9-bade-286cb336ded0)
+
+![Screenshot 2025-04-25 162438](https://github.com/user-attachments/assets/5faf11dd-7ed3-4f90-b001-6edcb4c997cc)
+
+![Screenshot 2025-04-25 162507](https://github.com/user-attachments/assets/8acb4c1e-60a4-4236-abb4-1f0caf9f54dc)
 
 with this watch tower you can watch for: new parameters / new subdomains / new ssl certificates / new medium write ups / new open ports / new js files that the developer has been add (and some other stuffs that will be add to the watch tower
 
