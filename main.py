@@ -47,7 +47,7 @@ class Config:
     LOG_DIR = Path("logs")
     RESTART_DELAY = 60
     MAX_RESTARTS = 5
-    
+
     MONITORS = {
         "ssl": {
             "script": "sslcertwatch.py",
@@ -89,7 +89,7 @@ log = logging.getLogger("watchtower")
 
 class ProcessManager:
     """Manages monitoring processes with restart capabilities"""
-    
+
     def __init__(self):
         self.console = Console()
         self.processes: Dict[str, subprocess.Popen] = {}
@@ -112,11 +112,11 @@ class ProcessManager:
     def run_monitor(self, script: str, description: str):
         """Run a monitoring script with supervision"""
         script_path = Config.SCRIPT_DIR / script
-        
+
         while not self.shutdown_event.is_set():
             try:
                 self.console.print(f"[bold green]STARTING[/] {description} ({script})")
-                
+
                 proc = subprocess.Popen(
                     [sys.executable, str(script_path)],
                     stdout=subprocess.PIPE,
@@ -124,32 +124,32 @@ class ProcessManager:
                     text=True,
                     bufsize=1
                 )
-                self.processes[description] = proc
-                
+                self.processes[script] = proc
+
                 # Start output logging threads
                 Thread(
                     target=self._log_stream,
                     args=(proc.stdout, lambda msg: log.info(f"[{script}] {msg}")),
                     daemon=True
                 ).start()
-                
+
                 Thread(
                     target=self._log_stream,
                     args=(proc.stderr, lambda msg: log.error(f"[{script}] {msg}")),
                     daemon=True
                 ).start()
-                
+
                 exit_code = proc.wait()
-                
+
                 if exit_code != 0:
                     self.restart_counts[script] = self.restart_counts.get(script, 0) + 1
                     if self.restart_counts[script] > Config.MAX_RESTARTS:
                         log.critical(f"Max restarts reached for {script}")
                         break
-                        
+
                     log.warning(f"{script} exited with code {exit_code}, restarting...")
                     time.sleep(Config.RESTART_DELAY)
-                
+
             except Exception as e:
                 log.error(f"Error running {script}: {str(e)}")
                 time.sleep(Config.RESTART_DELAY)
@@ -168,7 +168,7 @@ class ProcessManager:
 
 class Watchtower:
     """Main application controller"""
-    
+
     def __init__(self):
         self.console = Console()
         self.manager = ProcessManager()
@@ -184,7 +184,7 @@ class Watchtower:
 ██║     ██║  ██║██║ ╚████║██║ ╚═╝ ██║╚██████╔╝██║ ╚████║
 ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
 """, style="bold blue")
-        
+
         self.console.print(Panel(
             banner_text,
             title="[bold red]Security Watchtower[/]",
@@ -205,9 +205,9 @@ class Watchtower:
             title="Terms of Use",
             border_style="red"
         )
-        
+
         self.console.print(disclaimer)
-        
+
         # Require explicit acknowledgment
         try:
             inuy = input(Fore.LIGHTBLUE_EX+" ┌─["+Fore.LIGHTRED_EX+"FANMON"+Fore.BLUE+"~"+Fore.WHITE+"@ROOT Press enter to run the tool or press Ctrl+c to exit the tool"+Fore.LIGHTBLUE_EX+"""]
@@ -221,7 +221,7 @@ class Watchtower:
         checks = Table(title="Environment Validation", style="blue")
         checks.add_column("Check", style="cyan")
         checks.add_column("Status", style="magenta")
-        
+
         # Verify Python version
         py_version = sys.version_info
         if py_version >= (3, 8):
@@ -229,14 +229,14 @@ class Watchtower:
         else:
             checks.add_row("Python ≥ 3.8", f"✖ (Found {py_version.major}.{py_version.minor})")
             return False
-            
+
         # Verify script directory
         if Config.SCRIPT_DIR.exists():
             checks.add_row("Scripts directory", "✓")
         else:
             checks.add_row("Scripts directory", f"✖ (Missing: {Config.SCRIPT_DIR})")
             return False
-            
+
         # Verify individual scripts
         all_valid = True
         for name, config in Config.MONITORS.items():
@@ -246,7 +246,7 @@ class Watchtower:
             else:
                 checks.add_row(f"{config['description']}", f"✖ (Missing: {script})")
                 all_valid = False
-                
+
         self.console.print(checks)
         return all_valid
 
@@ -257,14 +257,14 @@ class Watchtower:
         status.add_column("PID", style="magenta")
         status.add_column("Status", style="yellow")
         status.add_column("Restarts", style="blue")
-        
+
         for name, proc in self.manager.processes.items():
             status.add_row(
-                Config.MONITORS[name]["description"],
+                Config.MONITORS.get(name, {"description": name})["description"],
                 str(proc.pid),
                 "[green]Running[/]" if proc.poll() is None else "[red]Stopped[/]",
                 str(self.manager.restart_counts.get(name, 0)))
-                
+
         self.console.print(status)
 
     def run(self):
@@ -272,11 +272,11 @@ class Watchtower:
         try:
             self.display_banner()
             self.show_disclaimer()
-            
+
             if not self.validate_environment():
                 self.console.print("[bold red]Failed environment validation[/]")
                 sys.exit(1)
-                
+
             # Start all monitors
             for name, config in Config.MONITORS.items():
                 Thread(
@@ -284,7 +284,7 @@ class Watchtower:
                     args=(config["script"], config["description"]),
                     daemon=True
                 ).start()
-                
+
             # Main loop
             while not self.manager.shutdown_event.is_set():
                 os.system('clear')
@@ -292,7 +292,7 @@ class Watchtower:
                 self.display_status()
                 self.console.print("\n[dim]Press Ctrl+C to shutdown gracefully...[/]")
                 time.sleep(5)
-                
+
         except Exception as e:
             log.critical(f"Fatal error: {str(e)}", exc_info=True)
             self.console.print(f"[bold red]CRITICAL ERROR:[/] {str(e)}")
