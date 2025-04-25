@@ -70,6 +70,8 @@ https://github.com/projectdiscovery/katana
 
 (8). enjoy your hunt!
 
+(9). its good to be run on linux not windows it can run on linux so good but you can have such a problems on windows
+
  ```
 
 
@@ -99,7 +101,7 @@ A comprehensive monitoring solution that tracks:
 - **Open Port Changes**
 - **JavaScript File Modifications**
 - **Parameter Discoveries**
-- **Medium Write-ups** 
+- **Medium Write-ups**
 
 ---
 
