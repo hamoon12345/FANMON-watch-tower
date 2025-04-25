@@ -71,12 +71,43 @@ make the first channel with name of the certificates watcher and then go to the 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-----------------------------------------------------------------------------------------------------------------------------------------------------
-
-![Screenshot 2025-04-24 203620](https://github.com/user-attachments/assets/7d7c413e-b81e-41ff-98f6-7a9ad1e258e6)
 
 
-WARNING: please be sure that you have configured discord hooks correctly and please run the script on a VPS server and in tmux https://phoenixnap.com/kb/tmux-cheat-sheet
+Enterprise-grade reconnaissance monitoring system for security professionals
+
+---
+
+## 🚀 Overview
+A comprehensive monitoring solution that tracks:
+- **New SSL Certificates**
+- **Emerging Subdomains**
+- **Open Port Changes**
+- **JavaScript File Modifications**
+- **Parameter Discoveries**
+- **Medium Write-ups** 
+
+---
+
+## ✨ Features
+- Real-time Discord alerts
+- Automated database management
+- Multi-source reconnaissance integration
+- Continuous monitoring engine
+- Customizable detection modules
+
+---
+
+## ⚙️ Installation
+
+### Requirements
+- Python 3.8+
+- MySQL Server
+- Core Tools:
+  - [Subfinder](https://github.com/projectdiscovery/subfinder)
+  - [Assetfinder](https://github.com/tomnomnom/assetfinder)
+  - [Nmap](https://nmap.org/)
+  - [Sublist3r](https://github.com/aboul3la/Sublist3r)
+  - [Katana](https://github.com/projectdiscovery/katana)
 
 
 # any misuse of this tool is on your own responsibility and the DEVELOPER does not take any responsibility for any misuse or attacks (it is only for educational purposes only )
@@ -91,8 +122,6 @@ WARNING: please be sure that you have configured discord hooks correctly and ple
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 [contributors-shield]: https://img.shields.io/github/contributors/hamoon12345/FANMON-watch-tower.svg?style=for-the-badge
 [contributors-url]: https://github.com/hamoon12345/FANMON-watch-tower/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/hamoon12345/FANMON-watch-tower.svg?style=for-the-badge
@@ -105,3 +134,19 @@ WARNING: please be sure that you have configured discord hooks correctly and ple
 [license-url]: https://github.com/hamoon12345/FANMON-watch-tower/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/hamoon12345
+
+### Setup Guide
+```bash
+# Clone repository
+configure the discord hooks
+git clone https://github.com/yourusername/fanmon-watchtower.git
+cd fanmon-watchtower
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure MySQL (Automatic DB creation)
+sudo apt install mysql-server  # Ubuntu/Debian
+brew install mysql
+python3 main.py             # macOS
+
