@@ -72,6 +72,14 @@ https://github.com/projectdiscovery/katana
 
 (9). its good to be run on linux not windows it can run on linux so good but you can have such a problems on windows
 
+(10). you dont want to do all of this? just run the docker file with:
+
+docker build -t watchtower .
+
+docker run -it --name watchtower-container watchtower
+
+
+
  ```
 
 
