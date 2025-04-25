@@ -1,0 +1,6 @@
+requests
+mysql-connector-python
+discord-webhook
+beautifulsoup4
+rich
+colorama
