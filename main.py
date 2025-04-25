@@ -124,7 +124,7 @@ class ProcessManager:
                     text=True,
                     bufsize=1
                 )
-                self.processes[script] = proc
+                self.processes[description] = proc
                 
                 # Start output logging threads
                 Thread(
@@ -278,15 +278,16 @@ class Watchtower:
                 sys.exit(1)
                 
             # Start all monitors
-            for monitor_key, config in Config.MONITORS.items():
+            for name, config in Config.MONITORS.items():
                 Thread(
                     target=self.manager.run_monitor,
-                    args=(monitor_key, config["script"], config["description"]),  # ✅ New
+                    args=(config["script"], config["description"]),
                     daemon=True
                 ).start()
                 
             # Main loop
             while not self.manager.shutdown_event.is_set():
+                os.system('clear')
                 self.display_banner()
                 self.display_status()
                 self.console.print("\n[dim]Press Ctrl+C to shutdown gracefully...[/]")
