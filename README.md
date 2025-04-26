@@ -164,8 +164,8 @@ A comprehensive monitoring solution that tracks:
 ```bash
 
 configure the discord hooks
-git clone https://github.com/hamoon12345/fanmon-watchtower.git
-cd fanmon-watchtower
+git clone https://github.com/hamoon12345/FANMON-watch-tower.git
+cd FANMON-watch-tower
 
 
 pip install -r requirements.txt
