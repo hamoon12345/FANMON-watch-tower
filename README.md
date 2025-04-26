@@ -162,16 +162,16 @@ A comprehensive monitoring solution that tracks:
 
 ### Setup Guide
 ```bash
-# Clone repository
+
 configure the discord hooks
-git clone https://github.com/yourusername/fanmon-watchtower.git
+git clone https://github.com/hamoon12345/fanmon-watchtower.git
 cd fanmon-watchtower
 
-# Install dependencies
+
 pip install -r requirements.txt
 
-# Configure MySQL (Automatic DB creation)
+
 sudo apt install mysql-server  # Ubuntu/Debian
 brew install mysql
-python3 main.py             # macOS
+python3 main.py           
 
