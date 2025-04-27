@@ -39,7 +39,7 @@
 
 ![Screenshot 2025-04-25 162507](https://github.com/user-attachments/assets/8acb4c1e-60a4-4236-abb4-1f0caf9f54dc)
 
-with this watch tower you can watch for: new parameters / new subdomains / new ssl certificates / new medium write ups / new open ports / new js files that the developer has been add (and some other stuffs that will be add to the watch tower
+with this watch tower you can watch for: new parameters / new subdomains / new ssl certificates / new medium write ups / new open ports / new js files that the developer has been add / new ips finder (and some other stuffs that will be add to the watch tower....)
 
 how to install it? 
  ```sh
@@ -61,6 +61,7 @@ https://github.com/tomnomnom/assetfinder
 
 https://nmap.org/
 
+https://github.com/projectdiscovery/dnsx
 
 https://github.com/aboul3la/Sublist3r
 
@@ -110,6 +111,7 @@ A comprehensive monitoring solution that tracks:
 - **JavaScript File Modifications**
 - **Parameter Discoveries**
 - **Medium Write-ups**
+- **NEW IPS**
 
 ---
 
@@ -131,6 +133,7 @@ A comprehensive monitoring solution that tracks:
   - [Subfinder](https://github.com/projectdiscovery/subfinder)
   - [Assetfinder](https://github.com/tomnomnom/assetfinder)
   - [Nmap](https://nmap.org/)
+  - [dnsx](https://github.com/projectdiscovery/dnsx)
   - [Sublist3r](https://github.com/aboul3la/Sublist3r)
   - [Katana](https://github.com/projectdiscovery/katana)
 
