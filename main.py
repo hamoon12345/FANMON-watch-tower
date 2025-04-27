@@ -57,6 +57,10 @@ class Config:
             "script": "medium.py",
             "description": "medium write up watcher"
         },
+        "IPSrecon": {
+            "script": "IP.py",
+            "description": "new IP FINDER"
+        },
         "ports": {
             "script": "openpo.py",
             "description": "Port Scanner"
