@@ -39,6 +39,9 @@
 
 ![Screenshot 2025-04-25 162507](https://github.com/user-attachments/assets/8acb4c1e-60a4-4236-abb4-1f0caf9f54dc)
 
+![Screenshot 2025-04-27 171254](https://github.com/user-attachments/assets/d9a46179-d4fc-41fd-834f-b7726f117be4)
+
+
 with this watch tower you can watch for: new parameters / new subdomains / new ssl certificates / new medium write ups / new open ports / new js files that the developer has been add / new ips finder (and some other stuffs that will be add to the watch tower....)
 
 how to install it? 
