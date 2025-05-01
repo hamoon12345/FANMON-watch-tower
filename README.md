@@ -1,7 +1,10 @@
 
-# new updates!!!!!!!!
-
 # FANMON watch tower 💣
+
+
+![Screenshot 2025-05-01 141532](https://github.com/user-attachments/assets/0fac16b0-b692-42fb-8eb7-df26a1759733)
+
+
 
 <a id="readme-top"></a>
 
