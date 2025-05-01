@@ -6,38 +6,19 @@ import time
 import sys
 import re
 from mysql.connector import connect, Error
-from discord_webhook import DiscordWebhook
-from datetime import datetime
 from discord_webhook import DiscordWebhook, DiscordEmbed
+from datetime import datetime
+
 # Configuration
 CONFIG = {
-    "scope_files": ["yourscope.txt"],
     "dnsx_path": "dnsx",
     "mysql_host": "localhost",
     "mysql_user": "root",
-    "mysql_password": "yourmysqlpassword",
-    "mysql_database": "ips",
-    "discord_webhook": "yourwebhook",
-    "check_interval": 3600  # 10 minutes in seconds
+    "mysql_password": "your password",
+    "mysql_database": "subdomain_watch",
+    "discord_webhook": "your web hook",
+    "check_interval": 3600  # 1 hour
 }
-
-def load_domains_from_files(file_paths):
-    """Load domains from scope files"""
-    domains = set()
-
-    for file_path in file_paths:
-        try:
-            with open(file_path, 'r') as f:
-                for line in f:
-                    domain = line.strip()
-                    if domain and not domain.startswith('#'):
-                        domains.add(domain)
-        except FileNotFoundError:
-            print(f"Scope file not found: {file_path}")
-        except Exception as e:
-            print(f"Error reading scope file {file_path}: {e}")
-
-    return list(domains)
 
 def setup_database():
     """Create database and table if they don't exist"""
@@ -62,7 +43,6 @@ def setup_database():
         )
         """)
 
-
         connection.commit()
         cursor.close()
         connection.close()
@@ -70,6 +50,26 @@ def setup_database():
     except Error as e:
         print(f"Database setup error: {e}")
 
+def load_subdomains_from_database():
+    """Load subdomains from MySQL database"""
+    try:
+        connection = connect(
+            host=CONFIG["mysql_host"],
+            user=CONFIG["mysql_user"],
+            password=CONFIG["mysql_password"],
+            database=CONFIG["mysql_database"]
+        )
+        cursor = connection.cursor()
+        cursor.execute("SELECT subdomain FROM subdomains")
+        results = cursor.fetchall()
+        return [result[0] for result in results]
+    except Error as e:
+        print(f"Database load error: {e}")
+        return []
+    finally:
+        if 'connection' in locals() and connection.is_connected():
+            cursor.close()
+            connection.close()
 
 def run_dnsx(domain):
     """Run dnsx to find IP addresses"""
@@ -89,7 +89,6 @@ def run_dnsx(domain):
     except subprocess.CalledProcessError as e:
         print(f"dnsx error for {domain}: {e}")
         return []
-
 
 def get_existing_ips(domain):
     """Get existing ips from database"""
@@ -113,8 +112,6 @@ def get_existing_ips(domain):
         if 'connection' in locals() and connection.is_connected():
             cursor.close()
             connection.close()
-
-
 
 def save_new_ips(domain, ips):
     """Save new ips to database"""
@@ -181,7 +178,7 @@ def send_discord_notification(domain, new_ips):
 
     embed.add_embed_field(
         name='🌐 Scope',
-        value=", ".join(CONFIG["scope_files"]),
+        value="Loaded from database",
         inline=True
     )
 
@@ -201,10 +198,10 @@ def monitor_domains():
     setup_database()
 
     while True:
-        domains = load_domains_from_files(CONFIG["scope_files"])
+        domains = load_subdomains_from_database()
 
         if not domains:
-            print("No domains found in scope files. Waiting for next check...")
+            print("No subdomains found in database. Waiting for next check...")
             time.sleep(CONFIG["check_interval"])
             continue
 
@@ -212,9 +209,7 @@ def monitor_domains():
             print(f"\nChecking ips for {domain}...")
 
             existing = get_existing_ips(domain)
-
             ips_get = run_dnsx(domain)
-
             all_ips = set(ips_get)
             new_ips = [sub for sub in all_ips if sub not in existing]
 

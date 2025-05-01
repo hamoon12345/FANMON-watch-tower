@@ -10,34 +10,34 @@ from discord_webhook import DiscordWebhook
 
 # Configuration
 CONFIG = {
-    "scope_files": ["yourscope.txt"], 
+    "scope_files": ["yourscope.txt"],
     "subfinder_path": "subfinder",
     "assetfinder_path": "assetfinder",
-    "sublist3r_path": "/root/Sublist3r/sublist3r.py",  
+    "sublist3r_path": "/root/Sublist3r/sublist3r.py",
     "mysql_host": "localhost",
     "mysql_user": "root",
-    "mysql_password": "yourpassword",
+    "mysql_password": "your password",
     "mysql_database": "subdomain_watch",
-    "discord_webhook": "yourwebhook",
+    "discord_webhook": "your web hook",
     "check_interval": 600  # 10 minutes in seconds
 }
 
 def load_domains_from_files(file_paths):
     """Load domains from scope files"""
     domains = set()
-    
+
     for file_path in file_paths:
         try:
             with open(file_path, 'r') as f:
                 for line in f:
                     domain = line.strip()
-                    if domain and not domain.startswith('#'):  
+                    if domain and not domain.startswith('#'):
                         domains.add(domain)
         except FileNotFoundError:
             print(f"Scope file not found: {file_path}")
         except Exception as e:
             print(f"Error reading scope file {file_path}: {e}")
-    
+
     return list(domains)
 
 def setup_database():
@@ -49,10 +49,10 @@ def setup_database():
             password=CONFIG["mysql_password"]
         )
         cursor = connection.cursor()
-        
+
         cursor.execute(f"CREATE DATABASE IF NOT EXISTS {CONFIG['mysql_database']}")
         cursor.execute(f"USE {CONFIG['mysql_database']}")
-        
+
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS subdomains (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,7 +62,7 @@ def setup_database():
             UNIQUE KEY unique_subdomain (domain, subdomain)
         )
         """)
-        
+
         connection.commit()
         cursor.close()
         connection.close()
@@ -108,7 +108,7 @@ def run_sublist3r(domain):
             text=True,
             check=True
         )
-        
+
 
         clean_output = []
         for line in result.stdout.splitlines():
@@ -117,7 +117,7 @@ def run_sublist3r(domain):
                 clean_line = line.strip()
                 if clean_line and domain in clean_line:
                     clean_output.append(clean_line)
-        
+
         return clean_output
     except subprocess.CalledProcessError as e:
         print(f"Sublist3r error for {domain}: {e}")
@@ -170,7 +170,7 @@ def save_new_subdomains(domain, subdomains):
     """Save new subdomains to database"""
     if not subdomains:
         return 0
-    
+
     try:
         connection = connect(
             host=CONFIG["mysql_host"],
@@ -179,7 +179,7 @@ def save_new_subdomains(domain, subdomains):
             database=CONFIG["mysql_database"]
         )
         cursor = connection.cursor()
-        
+
         new_count = 0
         for subdomain in subdomains:
             try:
@@ -191,7 +191,7 @@ def save_new_subdomains(domain, subdomains):
             except Error as e:
                 if "Duplicate entry" not in str(e):
                     print(f"Error saving subdomain {subdomain}: {e}")
-        
+
         connection.commit()
         return new_count
     except Error as e:
@@ -206,10 +206,10 @@ def send_discord_notification(domain, new_subdomains):
     """Send notification to Discord"""
     if not new_subdomains:
         return
-    
+
     message = f"🚨 **New subdomains found for {domain}** 🚨\n\n"
     message += "\n".join(f"- `{sub}`" for sub in new_subdomains)
-    
+
     try:
         webhook = DiscordWebhook(
             url=CONFIG["discord_webhook"],
@@ -225,31 +225,31 @@ def send_discord_notification(domain, new_subdomains):
 def monitor_domains():
     """Main monitoring function"""
     setup_database()
-    
+
     while True:
         domains = load_domains_from_files(CONFIG["scope_files"])
-        
+
         if not domains:
             print("No domains found in scope files. Waiting for next check...")
             time.sleep(CONFIG["check_interval"])
             continue
-            
+
         for domain in domains:
             print(f"\nChecking subdomains for {domain}...")
-            
+
             existing = get_existing_subdomains(domain)
-            
+
 
             subfinder_results = run_subfinder(domain)
             assetfinder_results = run_assetfinder(domain)
             sublist3r_results = run_sublist3r(domain)
             crtsh_results = query_crtsh(domain)
-            
 
-            all_subdomains = set(subfinder_results + assetfinder_results + 
+
+            all_subdomains = set(subfinder_results + assetfinder_results +
                                sublist3r_results + crtsh_results)
             new_subdomains = [sub for sub in all_subdomains if sub not in existing]
-            
+
             if new_subdomains:
                 print(f"Found {len(new_subdomains)} new subdomains for {domain}")
                 saved_count = save_new_subdomains(domain, new_subdomains)
@@ -257,7 +257,7 @@ def monitor_domains():
                 send_discord_notification(domain, new_subdomains)
             else:
                 print(f"No new subdomains found for {domain}")
-        
+
         print(f"\nWaiting {CONFIG['check_interval']} seconds for next check...")
         time.sleep(CONFIG["check_interval"])
 

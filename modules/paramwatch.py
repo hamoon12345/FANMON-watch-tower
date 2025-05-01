@@ -7,47 +7,49 @@ import sys
 import re
 from mysql.connector import connect, Error
 from discord_webhook import DiscordWebhook
+from urllib.parse import urlparse
 
-# Configuration
 CONFIG = {
-    "scope_files": ["yourscope.txt"],
     "katana_path": "katana",
     "mysql_host": "localhost",
     "mysql_user": "root",
-    "mysql_password": "yourpassword",
+    "mysql_password": "your password",
     "mysql_database": "parameter_sql",
-    "discord_webhook": "yourwebhook",
+    "subdomain_database": "subdomain_watch",
+    "discord_webhook": "your web hook",
     "check_interval": 600,
     "katana_timeout": 300,
     "katana_depth": 3,
     "max_urls_per_notification": 25,
-    "verbose": True  
+    "verbose": True
 }
 
 def print_verbose(message):
     if CONFIG["verbose"]:
         print(message)
 
-def load_urls_from_files(file_paths):
-    """Load URLs from scope files with improved error handling"""
-    urls = set()
-    for file_path in file_paths:
-        try:
-            with open(file_path, 'r') as f:
-                for line in f:
-                    url = line.strip()
-                    if url and not url.startswith('#'):
-
-                        if re.match(r'^https?://', url):
-                            urls.add(url)
-                        else:
-                            urls.add(f"https://{url}")
-        except Exception as e:
-            print(f"Error processing {file_path}: {str(e)}")
-    return list(urls)
+def get_subdomains_from_db():
+    """Fetch subdomains from database and format as URLs"""
+    try:
+        connection = connect(
+            host=CONFIG["mysql_host"],
+            user=CONFIG["mysql_user"],
+            password=CONFIG["mysql_password"],
+            database=CONFIG["subdomain_database"]
+        )
+        cursor = connection.cursor()
+        cursor.execute("SELECT DISTINCT subdomain FROM subdomains")
+        urls = {f"https://{row[0]}" for row in cursor.fetchall()}
+        return list(urls)
+    except Error as e:
+        print(f"Subdomain database error: {e}")
+        return []
+    finally:
+        if 'connection' in locals() and connection.is_connected():
+            cursor.close()
+            connection.close()
 
 def setup_database():
-    """Database setup with retry logic"""
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -83,7 +85,6 @@ def setup_database():
                 connection.close()
 
 def run_katana(url):
-    """Run Katana with improved configuration and output processing"""
     try:
         cmd = [
             CONFIG["katana_path"],
@@ -101,14 +102,12 @@ def run_katana(url):
             timeout=CONFIG["katana_timeout"]
         )
 
-
         param_urls = set()
         for line in result.stdout.splitlines():
             line = line.strip()
             if not line:
                 continue
 
- 
             if '?' not in line and any(line.endswith(ext) for ext in ['.js', '.css', '.png', '.jpg', '.gif']):
                 continue
 
@@ -122,7 +121,6 @@ def run_katana(url):
     return []
 
 def get_existing_urls():
-
     try:
         connection = connect(
             host=CONFIG["mysql_host"],
@@ -142,7 +140,6 @@ def get_existing_urls():
             connection.close()
 
 def save_new_urls(new_urls, source_domain):
-
     if not new_urls:
         return 0
 
@@ -190,7 +187,6 @@ def save_new_urls(new_urls, source_domain):
             connection.close()
 
 def send_discord_notification(new_urls, source_domain):
-    """Enhanced Discord notifications with better formatting"""
     if not new_urls:
         return
 
@@ -215,16 +211,15 @@ def send_discord_notification(new_urls, source_domain):
             print(f"Notification error: {e}")
 
 def monitor_urls():
-    """Main monitoring loop with improved error handling"""
     if not setup_database():
         print("Failed to setup database. Exiting.")
         return
 
     while True:
         try:
-            urls = load_urls_from_files(CONFIG["scope_files"])
+            urls = get_subdomains_from_db()
             if not urls:
-                print_verbose("No URLs found. Waiting...")
+                print_verbose("No subdomains found in database. Waiting...")
                 time.sleep(CONFIG["check_interval"])
                 continue
 

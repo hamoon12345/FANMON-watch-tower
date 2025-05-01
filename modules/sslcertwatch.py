@@ -4,12 +4,12 @@ from mysql.connector import Error
 import time
 
 # Discord Webhook
-DISCORD_WEBHOOK_URL = 'yourwebhook'
+DISCORD_WEBHOOK_URL = 'your web hook'
 
 # MySQL config
 DB_HOST = 'localhost'
 DB_USER = 'root'
-DB_PASSWORD = 'yourpassword'
+DB_PASSWORD = 'your password'
 DB_DATABASE = 'ssl_certificates'
 
 def get_cert_common_names(domain):
@@ -106,5 +106,5 @@ def read_domains_from_file(filename):
         return []
 
 # MAIN
-domains = read_domains_from_file("yourscope.txt")
+domains = read_domains_from_file("your scope.txt")
 monitor_domains(domains)
