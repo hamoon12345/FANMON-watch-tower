@@ -61,10 +61,6 @@ class Config:
             "script": "IP.py",
             "description": "new IP FINDER"
         },
-        "ports": {
-            "script": "openpo.py",
-            "description": "Port Scanner"
-        },
         "params": {
             "script": "paramwatch.py",
             "description": "Parameter Monitor"
@@ -184,9 +180,10 @@ class Watchtower:
 ███████╗ █████╗ ███╗   ██╗███╗   ███╗ ██████╗ ███╗   ██╗
 ██╔════╝██╔══██╗████╗  ██║████╗ ████║██╔═══██╗████╗  ██║
 █████╗  ███████║██╔██╗ ██║██╔████╔██║██║   ██║██╔██╗ ██║
-██╔══╝  ██╔══██║██║╚██╗██║██║╚██╔╝██║██║   ██║██║╚██╗██║
+██╔══╝  ██╔══██║██║╚██╗██║██║╚██╔╝██║██║   ██║██║╚██╗██║                   Eyes on signals, sharp and bright.
 ██║     ██║  ██║██║ ╚████║██║ ╚═╝ ██║╚██████╔╝██║ ╚████║
 ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+
 """, style="bold blue")
 
         self.console.print(Panel(
